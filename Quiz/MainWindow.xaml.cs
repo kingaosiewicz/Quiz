@@ -19,6 +19,7 @@ namespace Quiz
         public MainWindow()
         {
             InitializeComponent();
+            int alalalal = 3;
         }
     }
 }
