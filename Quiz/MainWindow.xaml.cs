@@ -20,7 +20,8 @@ namespace Quiz
         {
             InitializeComponent();
             zmiana!!!!!!;
-
+            tez dodaje zmiane ?????;
+            int gaga = 5;
         }
     }
 }
