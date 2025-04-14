@@ -19,9 +19,6 @@ namespace Quiz
         public MainWindow()
         {
             InitializeComponent();
-            zmiana!!!!!!;
-            tez dodaje zmiane ?????;
-            dodaje inna zmiane;
         }
     }
 }
