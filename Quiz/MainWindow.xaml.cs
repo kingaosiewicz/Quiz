@@ -18,7 +18,7 @@ namespace Quiz
     {
         public MainWindow()
         {
-            InitializeComponent(); //komentarz
+            InitializeComponent(); //komentarz do wyrzucenia pozniej
         }
     }
 }
