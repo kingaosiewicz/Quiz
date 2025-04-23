@@ -8,7 +8,7 @@ namespace Quiz.Model
 {
     public class Class1
     {
-        int id;
+        int id; //hjhjhj
         public Class1() { }
     }
 }
