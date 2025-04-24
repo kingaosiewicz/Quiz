@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Quiz.Model
 {
-    public class Class1
+    internal class QuizSerializer
     {
-        int id; //hjhjhj
-        public Class1() { }
     }
 }
