@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Quiz.Model
 {
-    internal class Quiz
+    public class Quiz
     {
+          public string Name { get; set; }
+          public List<Question> Questions { get; set; } = new();
+        
     }
 }

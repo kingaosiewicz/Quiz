@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Quiz.Model
 {
-    internal class Question
+    public class Question
     {
+        public string Text { get; set; }
+        public List<Answer> Answers { get; set; } = new();
     }
 }
