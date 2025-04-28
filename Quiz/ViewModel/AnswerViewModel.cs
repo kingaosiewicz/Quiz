@@ -7,15 +7,11 @@ using System.Threading.Tasks;
 
 namespace Quiz.ViewModel
 {
-    public class AnswerViewModel
+    public class AnswerViewModel(string text, bool isCorrect)
     {
-        public string Text { get; }
-        public bool IsCorrect { get; }
+        public string Text { get; } = text;
+        public bool IsCorrect { get; } = isCorrect;
 
-        public AnswerViewModel(Answer answer)
-        {
-            Text = answer.Text;
-            IsCorrect = answer.IsCorrect;
-        }
+        public AnswerViewModel(Answer answer) : this(answer.Text, answer.IsCorrect) { }
     }
 }
