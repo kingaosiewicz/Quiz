@@ -6,7 +6,5 @@
              xmlns:local="clr-namespace:Quiz.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+    <TextBlock Text="{Binding Text}" Padding="5"/>
 </UserControl>
