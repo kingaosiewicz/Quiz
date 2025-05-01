@@ -7,17 +7,18 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Quiz.ViewModel
 {
     public class QuizSolverViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<Question> Questions { get; set; }
-        public Question CurrentQuestion => Questions[CurrentQuestionIndex];
+        public string QuizTitle { get; set; } = "Przykładowy Quiz";
 
-        public int CurrentQuestionIndex { get; set; }
+        public ObservableCollection<QuestionViewModel> Questions { get; set; } = new();
 
-        public int SelectedAnswerIndex { get; set; } = -1;
+        private TimerService _timerService = new();
+        public string ElapsedTime => $"{_timerService.SecondsElapsed} sek.";
 
         private string _result;
         public string Result
@@ -26,27 +27,45 @@ namespace Quiz.ViewModel
             set { _result = value; OnPropertyChanged(); }
         }
 
+        public ICommand StartQuizCommand { get; }
+        public ICommand FinishQuizCommand { get; }
+
         public QuizSolverViewModel()
         {
-            Questions = new ObservableCollection<Question>
-            {
-                new Question
-                {
-                    Text = "Stolica Polski to:",
-                    Answers = new List<Answer>
-                    {
-                        new() { Text = "Warszawa", IsCorrect = true },
-                        new() { Text = "Kraków", IsCorrect = false },
-                        new() { Text = "Wrocław", IsCorrect = false },
-                        new() { Text = "Gdańsk", IsCorrect = false }
-                    }
-                }
-            };
+            LoadSampleQuiz();
+
+            StartQuizCommand = new RelayCommand(_ => StartQuiz());
+            FinishQuizCommand = new RelayCommand(_ => FinishQuiz());
+
+            _timerService.Tick += _ => OnPropertyChanged(nameof(ElapsedTime));
         }
 
-        public void CheckAnswer()
+        private void StartQuiz()
         {
-            Result = CurrentQuestion.Answers[SelectedAnswerIndex].IsCorrect ? "Dobrze!" : "Źle!";
+            _timerService.Start();
+        }
+
+        private void FinishQuiz()
+        {
+            _timerService.Stop();
+            int correct = Questions.Count(q => q.IsCorrectlyAnswered);
+            Result = $"Wynik: {correct}/{Questions.Count}";
+        }
+
+        private void LoadSampleQuiz()
+        {
+            var q = new Question
+            {
+                Text = "Które miasta były stolicą Polski?",
+                Answers = new List<Answer>
+                {
+                    new() { Text = "Warszawa", IsCorrect = true },
+                    new() { Text = "Kraków", IsCorrect = true },
+                    new() { Text = "Poznań", IsCorrect = false },
+                    new() { Text = "Gniezno", IsCorrect = true }
+                }
+            };
+            Questions.Add(new QuestionViewModel(q));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

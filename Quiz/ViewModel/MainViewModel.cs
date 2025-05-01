@@ -24,13 +24,29 @@ namespace Quiz.ViewModel
 
         public MainViewModel()
         {
-            ShowSolverCommand = new RelayCommand(_ => CurrentView = new QuizSolverView());
-            ShowEditorCommand = new RelayCommand(_ => CurrentView = new QuizEditorView());
-            CurrentView = new QuizSolverView(); // widok domyślny
+            ShowSolverCommand = new RelayCommand(_ => ShowSolver());
+            ShowEditorCommand = new RelayCommand(_ => ShowEditor());
+
+            ShowSolver(); // Domyślny widok
+        }
+
+        private void ShowSolver()
+        {
+            var view = new Quiz.View.QuizSolverView();
+            view.DataContext = new QuizSolverViewModel();
+            CurrentView = view;
+        }
+
+        private void ShowEditor()
+        {
+            var view = new Quiz.View.QuizEditorView();
+            view.DataContext = new QuizEditorViewModel(); // na razie pusty, ale gotowy na edycję
+            CurrentView = view;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string name = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
+
 }

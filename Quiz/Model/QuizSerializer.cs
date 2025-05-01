@@ -10,15 +10,17 @@ namespace Quiz.Model
 {
     public static class QuizSerializer
     {
-        public static void Save(string path, Quiz quiz)
+        public static void SaveEncrypted(string path, Quiz quiz, string password)
         {
-            var json = JsonSerializer.Serialize(quiz);
-            File.WriteAllText(path, json);
+            string json = JsonSerializer.Serialize(quiz);
+            byte[] encrypted = AesEncryption.Encrypt(json, password);
+            File.WriteAllBytes(path, encrypted);
         }
 
-        public static Quiz Load(string path)
+        public static Quiz LoadEncrypted(string path, string password)
         {
-            var json = File.ReadAllText(path);
+            byte[] encrypted = File.ReadAllBytes(path);
+            string json = AesEncryption.Decrypt(encrypted, password);
             return JsonSerializer.Deserialize<Quiz>(json);
         }
     }

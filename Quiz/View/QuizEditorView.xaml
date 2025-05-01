@@ -7,6 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel>
-        <TextBlock Text="Edytor Quizu" FontWeight="Bold" FontSize="16"/>
+        <TextBox Text="{Binding QuizName}" Margin="5"/>
+        <Button Content="Zapisz quiz" Command="{Binding SaveCommand}" Margin="5"/>
+        <Button Content="Wczytaj quiz" Command="{Binding LoadCommand}" Margin="5"/>
     </StackPanel>
 </UserControl>
