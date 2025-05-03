@@ -21,7 +21,21 @@ namespace Quiz.ViewModel
         }
 
         public bool IsCorrectlyAnswered =>
-            Answers.Where(a => a.IsCorrect).All(a => a.IsSelected) &&
-            Answers.Where(a => !a.IsCorrect).All(a => !a.IsSelected);
+            Answers.All(a => a.IsSelected == a.IsCorrect);
+
+        public string EvaluationMessage(bool isFinished)
+        {
+            if (!isFinished)
+                return string.Empty;
+
+            return IsCorrectlyAnswered ? "✔ Poprawna odpowiedź" : $"✘ Błąd w odpowiedziach. Poprawne: {GetCorrectAnswers()}";
+        }
+
+        private string GetCorrectAnswers()
+        {
+            return string.Join(", ", Answers.Where(a => a.IsCorrect).Select(a => a.Text));
+        }
+
     }
+
 }

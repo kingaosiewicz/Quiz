@@ -23,6 +23,11 @@ namespace Quiz.View
         public QuizSolverView()
         {
             InitializeComponent();
+
+            if (DataContext is Quiz.ViewModel.QuizSolverViewModel vm)
+            {
+                vm.RequestScrollToTop += () => QuizScrollViewer.ScrollToTop();
+            }
         }
     }
 }
