@@ -1,14 +1,96 @@
 ﻿<UserControl x:Class="Quiz.View.QuizEditorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Quiz.View"
-             mc:Ignorable="d" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:Quiz.ViewModel"
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel>
-        <TextBox Text="{Binding QuizName}" Margin="5"/>
-        <Button Content="Zapisz quiz" Command="{Binding SaveCommand}" Margin="5"/>
-        <Button Content="Wczytaj quiz" Command="{Binding LoadCommand}" Margin="5"/>
-    </StackPanel>
+
+    <!-- 1. Konwertery w Resources (jeśli potrzebujesz) -->
+    <UserControl.Resources>
+        <vm:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- 2. Lewa kolumna: lista istniejących quizów + przyciski -->
+        <StackPanel Grid.Column="0">
+            <TextBlock Text="Lista quizów:" FontWeight="Bold" Margin="0,0,0,5"/>
+            <ListBox ItemsSource="{Binding Quizzes}"
+         SelectedItem="{Binding SelectedQuiz}"
+         Height="200">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="2">
+                            <!-- Nazwa quizu -->
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                            <!-- Liczba pytań obok nazwy -->
+                            <TextBlock Text=" (" Margin="5,0,0,0"/>
+                            <TextBlock Text="{Binding Questions.Count}"/>
+                            <TextBlock Text=" pytania)"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <Button Content="Nowy quiz"
+                Command="{Binding CreateNewQuizCommand}"
+                Margin="0,0,5,0"/>
+                <Button Content="Zapisz wszystkie"
+                Command="{Binding SaveQuizCommand}"
+                IsEnabled="{Binding SelectedQuiz, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <Button Content="Wczytaj"
+                Command="{Binding LoadQuizCommand}"
+                Margin="5,0,0,0"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- 3. Prawa kolumna: edycja wybranego quizu -->
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Nazwa quizu -->
+                <TextBlock Text="Nazwa quizu:" FontWeight="Bold"/>
+                <TextBox Text="{Binding QuizName, UpdateSourceTrigger=PropertyChanged}"
+                 Margin="0,5,0,15"/>
+
+                <!-- Lista pytań -->
+                <TextBlock Text="Pytania:" FontWeight="Bold"/>
+                <ItemsControl ItemsSource="{Binding Questions}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="0,5">
+                                <StackPanel>
+                                    <TextBox Text="{Binding Text, Mode=TwoWay}" 
+                           FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                    <ItemsControl ItemsSource="{Binding Answers}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" Margin="0,2">
+                                                    <CheckBox IsChecked="{Binding IsCorrect}" VerticalAlignment="Center"/>
+                                                    <TextBox Text="{Binding Text, Mode=TwoWay}" Margin="5,0"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Dodaj pytanie -->
+                <Button Content="Dodaj nowe pytanie"
+                Command="{Binding AddQuestionCommand}"
+                Margin="0,10,0,0"/>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </UserControl>
