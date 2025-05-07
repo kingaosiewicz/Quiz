@@ -48,6 +48,7 @@ namespace Quiz.ViewModel
             {
                 _selectedQuiz = value;
                 OnPropertyChanged();
+                IsInEditMode = false;
                 if (_selectedQuiz != null)
                 {
                     QuizName = _selectedQuiz.Name;
