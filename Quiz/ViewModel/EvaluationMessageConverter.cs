@@ -12,9 +12,9 @@ namespace Quiz.ViewModel
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values[0] is QuestionViewModel question && values[1] is bool isFinished)
+            if (values[0] is QuestionViewModel question)
             {
-                return question.EvaluationMessage(isFinished);
+                return question.EvaluationMessage; // używamy właściwości, NIE metody
             }
             return string.Empty;
         }
