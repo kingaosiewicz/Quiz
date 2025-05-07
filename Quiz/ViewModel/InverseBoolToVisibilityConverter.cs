@@ -4,27 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 
 namespace Quiz.ViewModel
 {
-    public class IndexOfConverter : IValueConverter
+    public class InverseBoolToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var item = value;
-            var collection = parameter as System.Collections.IList;
-
-            if (collection != null)
-            {
-                return collection.IndexOf(item);
-            }
-
-            return -1;
+            bool isVisible = value is bool && (bool)value;
+            return isVisible ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            => throw new NotImplementedException();
+        {
+            if (value is Visibility visibility)
+                return visibility != Visibility.Visible;
+            return true;
+        }
     }
 }
 
