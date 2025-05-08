@@ -129,26 +129,26 @@ namespace Quiz.ViewModel
 
         private void SaveQuiz()
         {
-            var quiz = new Model.Quiz // Fully qualify the Quiz type
+            if (!Questions.Any())
+            {
+                MessageBox.Show("Quiz musi zawierać przynajmniej jedno pytanie.");
+                return;
+            }
+
+            var quiz = new Model.Quiz
             {
                 Name = QuizName,
-                Questions = Questions.ToList() // Convert ObservableCollection to List
+                Questions = Questions.ToList()
             };
 
             Quizzes.Add(quiz);
 
-            // Serializacja quizu do JSON
-            string json = System.Text.Json.JsonSerializer.Serialize(quiz);
-
-            // Zdefiniowanie hasła (możesz je zmienić na coś bardziej bezpiecznego)
-            string password = "moje_super_tajne_haslo"; // Hasło używane do szyfrowania
-
-            // Szyfrowanie JSON
+            string json = JsonSerializer.Serialize(quiz);
+            string password = "moje_super_tajne_haslo";
             byte[] encryptedData = AesEncryption.Encrypt(json, password);
-
-            // Zapis do pliku
-            File.WriteAllBytes($"{quiz.Name}.enc", encryptedData); // Zapisujemy zaszyfrowaną wersję
+            File.WriteAllBytes($"{quiz.Name}.enc", encryptedData);
         }
+
 
         private void LoadQuizzes()
         {
@@ -242,6 +242,11 @@ namespace Quiz.ViewModel
         }
         private void CommitEdit()
         {
+            if (!Questions.Any())
+            {
+                MessageBox.Show("Quiz musi zawierać przynajmniej jedno pytanie.");
+                return;
+            }
             // Stwórz lokalną referencję do quizu, który chcemy zapisać
             Model.Quiz quizToSave;
 
